@@ -8,3 +8,9 @@ yarn-error.log
 views/node_modules
 views/yarn-error.log
 views/npm-debug.log
+
+
+.idea
+
+# 数据库
+db
