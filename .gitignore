@@ -1,0 +1,10 @@
+# node.js
+#
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# vue
+views/node_modules
+views/yarn-error.log
+views/npm-debug.log
