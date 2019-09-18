@@ -9,6 +9,10 @@ const app = express();
 app.use(cookieParser())
 app.use(bodyParser.json())
 
+const path = require('path')
+app.use(express.static(path.resolve(__dirname, './views/dist')))
+// app.use(express.static(path.join(__dirname, './views/build')))
+
 let {
     connect,
     initSchemas,

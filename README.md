@@ -28,6 +28,14 @@ npm install or yarn install
 npm run dev
 ```
 
+#### 也可以不开客户端，直接执行
+
+```
+npm run build
+```
+
+##### 就能直接访问localhost:3002
+
 ### 开启数据库
 ```language
 cd db
