@@ -5,12 +5,12 @@
 ## 实现功能：
 
 - [x] 权限管理
-- [x] 支持markdown编辑器
+- [x] 支持markdown编辑器 
 - [x] 支持富文本编辑器
 - [x] 支持word,excel,pdf的录入
 - [ ] 支持word,excel,pdf的文件预览
 - [x] 支持全文检索
-- [x] 支持markdown 三级四级标题的目录索引
+- [x] 支持markdown （h1,h2,h3,h4）
 - [ ] 支持富文本目录索引
 
 

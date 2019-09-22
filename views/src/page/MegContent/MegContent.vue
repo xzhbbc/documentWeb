@@ -9,28 +9,54 @@
         </div>
         <div ref="markdownDom" class="content ui-layout-east markdown-body markdown" v-html="data.htmlContent"></div>
       </div>
+<!--      {[hideMenu]: !openMenu},-->
+<!--      <div v-if="menu.length != 0"-->
+<!--           :class="[ {'showMenu': openMenu}]"-->
+<!--           :style="hideMenu"-->
+<!--           class="menu wow pulse"-->
+<!--           data-wow-duration=".5s" data-wow-delay=".2s"-->
+<!--           ref="menu"-->
+<!--      >-->
+<!--        <div class="cir-btn" @click="activeMenu">-->
+<!--          <i class="el-icon-menu"></i>-->
+<!--        </div>-->
+<!--        <div class="first" v-for="(item, i) in menu" :key="i" >-->
+<!--          <a>-->
+<!--            <div @click="goFirst(item.name)" class="title">{{item.name}}</div>-->
+<!--          </a>-->
+<!--          <div v-for="(secItem, j) in item.list" @click="goFirst(secItem.name)" :key="j" class="sub">-->
+<!--            {{secItem.name}}-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
 
-      <div v-if="menu.length != 0"
-           :class="[{'hideMenu': !openMenu}, {'showMenu': openMenu}]"
-           class="menu wow pulse"
-           data-wow-duration=".5s" data-wow-delay=".2s"
-      >
-        <div class="cir-btn" @click="activeMenu">
-          <i class="el-icon-menu"></i>
-        </div>
-        <div class="first" v-for="(item, i) in menu" :key="i" >
-          <a>
-            <div @click="goFirst(item.name)" class="title">{{item.name}}</div>
-          </a>
-          <div v-for="(secItem, j) in item.list" @click="goFirst(secItem.name)" :key="j" class="sub">
-            {{secItem.name}}
-          </div>
-        </div>
+      <div class="cir-btn" @click="activeMenu">
+        <i class="el-icon-menu"></i>
       </div>
+
 
       <div @click="goUp" class="circleUp">
         <i class="el-icon-top"></i>
       </div>
+
+      <el-drawer
+        title="目录"
+        :visible.sync="drawer"
+        :direction="direction"
+        :before-close="handleClose">
+<!--        <div class="menuFirst" v-for="(item, i) in menu" :key="i" >-->
+<!--          <a>-->
+<!--            <div @click="goFirst(item.name)" class="title">{{item.name}}</div>-->
+<!--          </a>-->
+<!--          <div v-for="(secItem, j) in item.list" @click="goFirst(secItem.name)" :key="j" class="menuSub">-->
+<!--            {{secItem.name}}-->
+<!--          </div>-->
+<!--        </div>-->
+        <div class="menuList" v-for="(item, i) in newMenu" :key="i">
+          <div class="menu" :class="item.localName" @click="goFirst(item.name)">{{item.name}}</div>
+        </div>
+      </el-drawer>
+
     </div>
 </template>
 
@@ -50,8 +76,11 @@
                     },
                     tags: '',
                 },
-                menu: [],
-                openMenu: false
+                openMenu: false,
+                hideMenu: null,
+                drawer: false,
+                direction: 'rtl',
+                newMenu: []
             }
         },
         created() {
@@ -77,40 +106,34 @@
             },
             getDomMenu() {
                 setTimeout(() => {
-                    console.log(this.menu)
                     let allDom = Array.from(this.$refs.markdownDom.getElementsByTagName('*'))
-                    let nowIndex = -1
-                    let menu = []
                     allDom.map((item, i) => {
                         if (item.id != '') {
-                            if (item.localName == 'h3') {
-                                nowIndex++
-                                //一级目录
-                                console.log(menu)
-                                menu.push({
-                                    name: item.id,
-                                    list: []
-                                })
-                            } else if (item.localName == 'h4') {
-                                menu[nowIndex].list.push({
+                            if (item.localName == 'h1'||item.localName == 'h2' || item.localName == 'h3' || item.localName == 'h4') {
+                                this.newMenu.push({
+                                    localName: item.localName,
                                     name: item.id
                                 })
                             }
                         }
                     })
-                    this.menu = menu
+
                 }, 500)
             },
             goFirst(name) {
                 // window.location.hash = "#myPopup2"
+                this.drawer = false
                 let dom = document.querySelector('#' + name)
                 window.scroll(0, dom.offsetTop)
             },
             activeMenu() {
-                this.openMenu = !this.openMenu
+                this.drawer = true
             },
             goUp() {
                 window.scroll(0, 0)
+            },
+            handleClose(done) {
+                done()
             }
         }
     }
@@ -125,10 +148,62 @@
       transform: translateY(-10px);
     }
   }
+
+  .menuList {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 17px;
+    text-indent: 1em;
+    .h1 {
+      cursor: pointer;
+      text-indent: 1em;
+      margin-bottom: 20px;
+      font-weight: bold;
+      font-size: 21px;
+      color: #000;
+    }
+    .h2 {
+      cursor: pointer;
+      text-indent: 2em;
+      margin: 15px 0;
+      color: #000;
+    }
+    .h3 {
+      cursor: pointer;
+      text-indent: 3em;
+      margin-bottom: 10px;
+    }
+    .h4 {
+      cursor: pointer;
+      text-indent: 4em;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    .menuSub {
+      cursor: pointer;
+      text-indent: 3em;
+      margin-bottom: 5px;
+    }
+  }
 .megContent {
   width: 100%;
   background: rgb(237,237,241);
   padding: 100px 0;
+
+  .cir-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    position: fixed;
+    right: 0px;
+    top: 50px;
+    background: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow:0px 0px 2px #333;
+  }
+
   .circleUp {
     width: 40px;
     height: 40px;
@@ -192,7 +267,7 @@
     transition: 1s all ease;
   }
   .hideMenu {
-    transform: rotateZ(-30deg) translate3d(450px, 0, 0);
+    transform: rotateZ(-30deg) translate3d(395px, 0, 0);
     transition: 1s all ease;
   }
   .wrap {
