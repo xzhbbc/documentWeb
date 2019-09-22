@@ -1,6 +1,6 @@
 <template>
     <div class="index">
-      歡迎你的到來，{{user.Department.name}}的{{user.user}}
+      欢迎你的到来，{{user.Department.name}}的{{user.user}}
     </div>
 </template>
 

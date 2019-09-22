@@ -6,7 +6,7 @@
       </div>
       <div class="nav">
         <div class="item" :class="{'active': routeId == ''}" @click="goPath('/')">
-          首頁
+            首页
         </div>
         <div
           v-for="item in getOption"
@@ -17,8 +17,8 @@
         >{{item.name}}</div>
         <div class="right_itemList">
           <div class="right_item" v-show="login" @click="goOut">退出</div>
-          <div class="right_item" v-show="login" @click="goPath('/server')">歡迎您，{{user.user}}</div>
-          <div class="right_item" v-show="!login" @click="goPath('/login')">登陸</div>
+          <div class="right_item" v-show="login" @click="goPath('/server')">欢迎你，{{user.user}}</div>
+          <div class="right_item" v-show="!login" @click="goPath('/login')">登录</div>
           <div class="right_icon" @click="openSearch">
             <div class="icon el-icon-search"></div>
           </div>

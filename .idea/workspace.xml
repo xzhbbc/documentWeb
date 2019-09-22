@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="081ba6d4-314d-457b-90a7-01db1dbead42" name="Default Changelist" comment="修复markdown目录显示问题">
-      <change beforePath="$PROJECT_DIR$/.idea/documentWeb.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/documentWeb.iml" afterDir="false" />
+    <list default="true" id="081ba6d4-314d-457b-90a7-01db1dbead42" name="Default Changelist" comment="添加">
+      <change afterPath="$PROJECT_DIR$/utils/fileHelper.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/src/components/Header/Header.vue" beforeDir="false" afterPath="$PROJECT_DIR$/views/src/components/Header/Header.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/src/page/MegContent/MegContent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/views/src/page/MegContent/MegContent.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/src/page/ServerPage/Server/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/views/src/page/ServerPage/Server/Index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -91,7 +93,7 @@
       <workItem from="1568815355581" duration="1195000" />
       <workItem from="1568858019507" duration="453000" />
       <workItem from="1568951921305" duration="1184000" />
-      <workItem from="1569115968387" duration="5149000" />
+      <workItem from="1569115968387" duration="8219000" />
     </task>
     <task id="LOCAL-00001" summary="删除多余数据库">
       <created>1568179884072</created>
@@ -128,7 +130,14 @@
       <option name="project" value="LOCAL" />
       <updated>1568816168115</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="修复markdown目录显示问题">
+      <created>1569121559186</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1569121559186</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,6 +161,7 @@
     <MESSAGE value="修改ReadMe" />
     <MESSAGE value="删除多余node_modules" />
     <MESSAGE value="加入node静态托管" />
-    <option name="LAST_COMMIT_MESSAGE" value="加入node静态托管" />
+    <MESSAGE value="修复markdown目录显示问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复markdown目录显示问题" />
   </component>
 </project>

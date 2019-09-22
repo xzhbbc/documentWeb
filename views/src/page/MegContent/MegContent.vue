@@ -7,33 +7,13 @@
           <span class="iconfont icon-biaoji"></span>
           <span class="text">{{data.create_user.user}} | {{data.tags}}</span>
         </div>
-        <div ref="markdownDom" class="content ui-layout-east markdown-body markdown" v-html="data.htmlContent"></div>
+        <div v-if="markdown" ref="markdownDom" class="content ui-layout-east markdown-body markdown" v-html="data.htmlContent"></div>
+        <div v-else ref="htmlDom" class="content ui-layout-east markdown-body markdown" v-html="data.htmlContent"></div>
       </div>
-<!--      {[hideMenu]: !openMenu},-->
-<!--      <div v-if="menu.length != 0"-->
-<!--           :class="[ {'showMenu': openMenu}]"-->
-<!--           :style="hideMenu"-->
-<!--           class="menu wow pulse"-->
-<!--           data-wow-duration=".5s" data-wow-delay=".2s"-->
-<!--           ref="menu"-->
-<!--      >-->
-<!--        <div class="cir-btn" @click="activeMenu">-->
-<!--          <i class="el-icon-menu"></i>-->
-<!--        </div>-->
-<!--        <div class="first" v-for="(item, i) in menu" :key="i" >-->
-<!--          <a>-->
-<!--            <div @click="goFirst(item.name)" class="title">{{item.name}}</div>-->
-<!--          </a>-->
-<!--          <div v-for="(secItem, j) in item.list" @click="goFirst(secItem.name)" :key="j" class="sub">-->
-<!--            {{secItem.name}}-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
 
       <div class="cir-btn" @click="activeMenu">
         <i class="el-icon-menu"></i>
       </div>
-
 
       <div @click="goUp" class="circleUp">
         <i class="el-icon-top"></i>
@@ -44,14 +24,6 @@
         :visible.sync="drawer"
         :direction="direction"
         :before-close="handleClose">
-<!--        <div class="menuFirst" v-for="(item, i) in menu" :key="i" >-->
-<!--          <a>-->
-<!--            <div @click="goFirst(item.name)" class="title">{{item.name}}</div>-->
-<!--          </a>-->
-<!--          <div v-for="(secItem, j) in item.list" @click="goFirst(secItem.name)" :key="j" class="menuSub">-->
-<!--            {{secItem.name}}-->
-<!--          </div>-->
-<!--        </div>-->
         <div class="menuList" v-for="(item, i) in newMenu" :key="i">
           <div class="menu" :class="item.localName" @click="goFirst(item.name)">{{item.name}}</div>
         </div>
@@ -63,6 +35,8 @@
 <script>
     import * as api from '../../util/api'
     import moment from 'moment'
+
+    let timerMark = null,timerHtml = null
 
     export default {
         name: "MegContent",
@@ -80,14 +54,19 @@
                 hideMenu: null,
                 drawer: false,
                 direction: 'rtl',
-                newMenu: []
+                newMenu: [],
+                markdown: false
             }
         },
-        created() {
-            this.getData()
-        },
-        mounted() {
-            this.getDomMenu()
+        async mounted() {
+            await this.getData()
+            if (this.markdown) {
+                //处理markdown的目录
+                this.getDomMenu()
+            } else {
+                //处理富文本的目录
+                this.getDomHtmlMenu()
+            }
             // console.log(this.$refs.markdownDom.getElementsByTagName('*'))
         },
         updated() {
@@ -96,23 +75,27 @@
         methods: {
             async getData() {
                 let data = await api.get('/front/getContentOne?id=' + this.$route.query.id)
-                console.log(data)
+
                 if (data._id) {
                     this.data = data
+                    if (data.markDown&&data.markDown != '') {
+                        this.markdown = true
+                    }
                 }
             },
             renderTime(date) {
                 return moment(date).format('YYYY-MM-DD HH:mm')
             },
             getDomMenu() {
-                setTimeout(() => {
+                clearTimeout(timerMark)
+                timerMark = setTimeout(() => {
                     let allDom = Array.from(this.$refs.markdownDom.getElementsByTagName('*'))
-                    allDom.map((item, i) => {
-                        if (item.id != '') {
-                            if (item.localName == 'h1'||item.localName == 'h2' || item.localName == 'h3' || item.localName == 'h4') {
+                    allDom.map((dom, i) => {
+                        if (dom.id != '') {
+                            if (dom.localName == 'h1'||dom.localName == 'h2' || dom.localName == 'h3' || dom.localName == 'h4') {
                                 this.newMenu.push({
-                                    localName: item.localName,
-                                    name: item.id
+                                    localName: dom.localName,
+                                    name: dom.id
                                 })
                             }
                         }
@@ -120,10 +103,27 @@
 
                 }, 500)
             },
+            getDomHtmlMenu() {
+                clearTimeout(timerHtml)
+                timerHtml = setTimeout(() => {
+                    let allDom = Array.from(this.$refs.htmlDom.getElementsByTagName('*'))
+                    allDom.map((dom, i) => {
+                        if (dom.localName == 'h1'||dom.localName == 'h2' || dom.localName == 'h3' || dom.localName == 'h4') {
+                            dom.setAttribute('id', dom.innerHTML)
+                            this.newMenu.push({
+                                localName: dom.localName,
+                                name: dom.innerHTML
+                            })
+                        }
+                    })
+                }, 500)
+            },
             goFirst(name) {
-                // window.location.hash = "#myPopup2"
+                // window.location.hash = "#myPopup2" id=['123456']
                 this.drawer = false
-                let dom = document.querySelector('#' + name)
+                // let dom = document.querySelector('#' + name)
+                let dom = document.getElementById(name)
+                // console.log(dom)
                 window.scroll(0, dom.offsetTop)
             },
             activeMenu() {
